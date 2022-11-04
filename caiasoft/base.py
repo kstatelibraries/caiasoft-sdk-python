@@ -141,3 +141,11 @@ class Caiasoft(object):
 
         resp = self._request(f"circrequests/v1", method="POST", json={"requests": payload})
         return dict({"count": resp['request_count'], 'results': resp['results']})
+
+    def item_info(self, barcode : str) -> dict:
+        """
+        Retreives Item Information
+        :param str barcode: Alphanumeric String
+        """
+        resp = self._request(f"/item/v1/{barcode}")
+        return dict({"count": len(resp['items']), 'items': resp['items']})

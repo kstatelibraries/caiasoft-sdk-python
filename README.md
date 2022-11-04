@@ -50,7 +50,7 @@ Documentation for the SDK can be found at ...
 | GET    | /bibmissing           | Implemented / No Tests |
 | GET    | /bibmissing_bydate    | Missing |
 | GET    | /circstoplist         | Missing |
-| GET    | /item                 | Missing |
+| GET    | /item                 | Implemented / No Tests |
 | GET    | /itemloc              | Missing |
 | GET    | /itemstatus           | Missing |
 | GET    | /refiledlist          | Missing |
