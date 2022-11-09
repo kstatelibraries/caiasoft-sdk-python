@@ -149,3 +149,19 @@ class Caiasoft(object):
         """
         resp = self._request(f"/item/v1/{barcode}")
         return dict({"count": len(resp['items']), 'items': resp['items']})
+
+    def items_by_barcode(self, barcodes : list) -> dict:
+        """
+        Items by Barcode - JSON sent to URL to find item status and info on one or more items in a single post
+        :param list barcode: Alphanumeric String
+        """
+        resp = self._request("/itemsbybarcode/v1", method="POST", json={"barcodes": barcodes})
+        return dict({"count": resp['item_count'], 'items': resp['items']})
+
+    def item_location_by_barcode(self, barcodes : list) -> dict:
+        """
+        Item Location List
+        :param list barcode: Alphanumeric String
+        """
+        resp = self._request("/itemloclist/v1", method="POST", json={"items": barcodes})
+        return dict({"count": len(resp['item']), 'items': resp['item']})

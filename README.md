@@ -61,8 +61,8 @@ Documentation for the SDK can be found at ...
 | POST   | /circrequests         | Implemented / No Tests |
 | POST   | /incomingitems        | Missing |
 | POST   | /itemupdates          | Missing |
-| POST   | /itemsbybarcode       | Missing |
-| POST   | /itemloclist          | Missing |
+| POST   | /itemsbybarcode       | Implemented / No Tests |
+| POST   | /itemloclist          | Implemented / No Tests |
 
 # Contributing & Bug Reporting
 
