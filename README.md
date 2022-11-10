@@ -43,26 +43,27 @@ The full API documentation can be found at https://portal.caiasoft.com/apiguide.
 Documentation for the SDK can be found at ...
 
 # API Status
-| Method | Caiasoft API Endpoint | Status |
-| ------ | --------------------- | ------ |
-| GET    | /accessionedlist      | Implemented / No Tests |
-| GET    | /accessioninfo        | Implemented / No Tests |
-| GET    | /bibmissing           | Implemented / No Tests |
-| GET    | /bibmissing_bydate    | Missing |
-| GET    | /circstoplist         | Missing |
-| GET    | /item                 | Implemented / No Tests |
-| GET    | /itemloc              | Missing |
-| GET    | /itemstatus           | Missing |
-| GET    | /refiledlist          | Missing |
-| GET    | /retrievedlist        | Missing |
-| POST   | /attributefile        | Missing |
-| POST   | /incomingfile         | Missing |
-| POST   | /requestfile          | Missing |
-| POST   | /circrequests         | Implemented / No Tests |
-| POST   | /incomingitems        | Missing |
-| POST   | /itemupdates          | Missing |
-| POST   | /itemsbybarcode       | Implemented / No Tests |
-| POST   | /itemloclist          | Implemented / No Tests |
+| Method | Caiasoft API Endpoint |        Status          | Function Name            |
+| ------ | --------------------- | ---------------------- | ------------------------ |
+| GET    | /accessionedlist      | Implemented / No Tests | accessioned_items        |
+| GET    | /accessioninfo        | Implemented / No Tests | accession_info           |
+| GET    | /accessioned_active   | Implemented / No Tests | accession_items_active   |
+| GET    | /bibmissing           | Implemented / No Tests | missing_bibfield         |
+| GET    | /bibmissing_bydate    | Missing                | |
+| GET    | /circstoplist         | Missing                | |
+| GET    | /item                 | Implemented / No Tests | item_info                |
+| GET    | /itemloc              | Missing                | |
+| GET    | /itemstatus           | Missing                | |
+| GET    | /refiledlist          | Missing                | |
+| GET    | /retrievedlist        | Missing                | |
+| POST   | /attributefile        | Missing                | |
+| POST   | /incomingfile         | Missing                | |
+| POST   | /requestfile          | Missing                | |
+| POST   | /circrequests         | Implemented / No Tests | circulation_request      |
+| POST   | /incomingitems        | Missing                | |
+| POST   | /itemupdates          | Missing                | |
+| POST   | /itemsbybarcode       | Implemented / No Tests | items_by_barcode         |
+| POST   | /itemloclist          | Implemented / No Tests | item_location_by_barcode |
 
 # Contributing & Bug Reporting
 

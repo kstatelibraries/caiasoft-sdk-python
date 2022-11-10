@@ -50,12 +50,27 @@ class Caiasoft(object):
     def accessioned_items(self, accfrom: int, accto:int , collection: str = 'ALL') -> dict:
         """
         Get Accessioned Item List
+        This returns all items, both accessioned (active) and deaccessioned
         :param str accfrom: date in YYYYMMDD format
         :param str accto: date in YYYYMMDD format, Repeat accfrom date for one day. Field cannot be blank.
         :param str collection: alphanumeric string, Single collection or Report Class (group of collections) accepted.
             Use “ALL” for all collections.
         """
         resp = self._request(f"/accessionedlist/v1/{accfrom}/{accto}/{collection}")
+        return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
+
+    def accession_items_active(self, accfrom: int, accto:int , collection: str = 'ALL') -> dict:
+        """
+        Get Accessioned Item List of Active Items
+        This returns only acessioned (active) items.
+        :param str accfrom: date in YYYYMMDD format
+        :param str accto: date in YYYYMMDD format, Repeat accfrom date for one day. Field cannot be blank.
+        :param str collection: alphanumeric string, Single collection or Report Class (group of collections) accepted.
+            Use “ALL” for all collections.
+        """
+
+        print(f"/accessioned_active/v1/{accfrom}/{accto}/{collection}")
+        resp = self._request(f"/accessioned_active/v1/{accfrom}/{accto}/{collection}")
         return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
 
     def accession_info(self, accfrom: int, accto: int, collection: str = 'ALL') -> dict:
@@ -68,7 +83,7 @@ class Caiasoft(object):
         """
         resp = self._request(f"/accessioninfo/v1/{accfrom}/{accto}/{collection}")
         return dict({"count": resp['count'], 'items': resp['items']})
-    
+
     def missing_bibfield(self, bibfield: str, collection : str = 'ALL') -> dict:
         """
         Accessioned Item info - Use this API to receive back full info on accessioned items, not just a barcode list
