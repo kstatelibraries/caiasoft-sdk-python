@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "caiasoft-sdk-python"
-version = "0.6.0"
+version = "0.7.0"
 description = "SDK for Caiasoft API"
 authors = ["Thomas Misilo <tmisilo@ksu.edu>"]
 license = "MIT"

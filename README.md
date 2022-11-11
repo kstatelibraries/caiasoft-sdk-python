@@ -52,7 +52,7 @@ Documentation for the SDK can be found at ...
 | GET    | /bibmissing_bydate    | Missing                | |
 | GET    | /circstoplist         | Missing                | |
 | GET    | /item                 | Implemented / No Tests | item_info                |
-| GET    | /itemloc              | Missing                | |
+| GET    | /itemloc              | Implemented / No Tests | item_loc                 |
 | GET    | /itemstatus           | Missing                | |
 | GET    | /refiledlist          | Missing                | |
 | GET    | /retrievedlist        | Missing                | |

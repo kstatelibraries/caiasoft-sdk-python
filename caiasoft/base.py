@@ -165,6 +165,14 @@ class Caiasoft(object):
         resp = self._request(f"/item/v1/{barcode}")
         return dict({"count": len(resp['items']), 'items': resp['items']})
 
+    def item_loc(self, barcode : str) -> dict:
+        """
+        Retreives Item Location
+        :param str barcode: Alphanumeric String
+        """
+        resp = self._request(f"/itemloc/v1/{barcode}")
+        return dict({"count": len(resp['item']), 'item': resp['item']})
+
     def items_by_barcode(self, barcodes : list) -> dict:
         """
         Items by Barcode - JSON sent to URL to find item status and info on one or more items in a single post
