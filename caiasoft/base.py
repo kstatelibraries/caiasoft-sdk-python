@@ -1,6 +1,8 @@
 import re
 import os
 import requests
+from pydantic import BaseModel
+from itertools import islice
 
 class APIError(ValueError):
     pass
@@ -10,6 +12,7 @@ class Caiasoft(object):
     def __init__(self, api_key, site_name):
         self.api_key = api_key
         self.site_name = site_name
+        self.valid_bibfields = ['none', 'title', 'author', 'callnumber', 'itemid', 'all']
 
     @property
     def headers(self):
@@ -18,7 +21,7 @@ class Caiasoft(object):
             "X-API-Key": self.api_key,
         }
 
-    def _request(self, endpoint: str, method='GET', params=None, data=None, json=None):
+    def _request(self, endpoint: str, method='GET', params=None, data=None, json=None, timeout=30):
         
         """Make an authenticated request to the API, raise any API errors, and
         returns data.
@@ -30,13 +33,21 @@ class Caiasoft(object):
         """
 
         api_url = f"https://{self.site_name}.caiasoft.com/api/{endpoint.lstrip('/')}"
-        response = requests.request(method=method, url=api_url, params=params, json=json, data=data, headers=self.headers, timeout=30)
+        response = requests.request(
+            method=method,
+            url=api_url,
+            params=params,
+            json=json,
+            data=data,
+            headers=self.headers,
+            timeout=timeout
+        )
 
+        print(response.request.body)
         if not response.json()['success']:
             raise APIError(f"Request to {response.url} returned {response.json()['error']}")
 
         if response.status_code != 200:
-            print(response.json())
             raise APIError('Request to {} returned {}'.format(response.url, response.status_code))
 
         response = response.json()
@@ -47,6 +58,19 @@ class Caiasoft(object):
 
         return response
 
+    def _validate_date(self, date: str) -> bool or str:
+        """
+        Validate the Datestamp
+        :param str date: Date format YYYYMMDD
+        """
+        if not re.match(r"(19|20)(\d{2})(\d{2})(\d{2})", date):
+            raise APIError('Date needs to be formatted as YYYYMMDD')
+        return date
+
+    def _split_data(self, data, size=500):
+        data = iter(data)
+        return iter(lambda: tuple(islice(data, size)), ())
+
     def accessioned_items(self, accfrom: int, accto:int , collection: str = 'ALL') -> dict:
         """
         Get Accessioned Item List
@@ -56,6 +80,10 @@ class Caiasoft(object):
         :param str collection: alphanumeric string, Single collection or Report Class (group of collections) accepted.
             Use “ALL” for all collections.
         """
+
+        self._validate_date(accfrom)
+        self._validate_date(accto)
+
         resp = self._request(f"/accessionedlist/v1/{accfrom}/{accto}/{collection}")
         return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
 
@@ -69,6 +97,9 @@ class Caiasoft(object):
             Use “ALL” for all collections.
         """
 
+        self._validate_date(accfrom)
+        self._validate_date(accto)
+
         print(f"/accessioned_active/v1/{accfrom}/{accto}/{collection}")
         resp = self._request(f"/accessioned_active/v1/{accfrom}/{accto}/{collection}")
         return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
@@ -81,6 +112,10 @@ class Caiasoft(object):
         :param str collection: alphanumeric string, Single collection or Report Class (group of collections) accepted.
             Use “ALL” for all collections.
         """
+
+        self._validate_date(accfrom)
+        self._validate_date(accto)
+
         resp = self._request(f"/accessioninfo/v1/{accfrom}/{accto}/{collection}")
         return dict({"count": resp['count'], 'items': resp['items']})
 
@@ -96,12 +131,34 @@ class Caiasoft(object):
             Use “ALL” for all collections.
         """
 
-        valid_bibfields = ['none', 'title', 'author', 'callnumber', 'itemid', 'all']
-
-        if bibfield.lower() not in valid_bibfields:
+        if bibfield.lower() not in self.valid_bibfields:
             raise APIError(f"{bibfield} is not a valid value for bibfield.")
 
         resp = self._request(f"bibmissing/v1/{collection}/{bibfield.lower()}")
+        return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
+
+    def missing_bibfield_bydate(self, accfrom: str, accto: str, bibfield: str, collection : str = 'ALL') -> dict:
+        """
+        Item Bibliographic Information Missing - Use this API to receive a list of items by date
+            accesssed that do not have certain bibliographic details on file.
+        :param str accfrom: date in YYYYMMDD format
+        :param str accto: date in YYYYMMDD format, Repeat accfrom date for one day. Field cannot be blank.
+        :param str bibfield: The following fields are accepted: none, title, author, callnumber, itemid.
+            Use this parameter for a list of barcodes that are missing the bibfield info for
+                items accessed in the date parameters provided.
+            Example: “title” will return all items that have no title in their bibliographic info.
+            Note that “all” will return items with no bibliographic records or all of the accepted fields blank.
+        :param str collection: alphanumeric string, Single collection or Report Class (group of collections) accepted.
+            Use “ALL” for all collections.
+        """
+
+        self._validate_date(accfrom)
+        self._validate_date(accto)
+
+        if bibfield.lower() not in self.valid_bibfields:
+            raise APIError(f"{bibfield} is not a valid value for bibfield.")
+
+        resp = self._request(f"bibmissing_bydate/v1/{accfrom}/{accto}/{collection}/{bibfield.lower()}")
         return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
 
     def circulation_request(self, barcode: str, request_type: str, stop: str,
@@ -188,3 +245,193 @@ class Caiasoft(object):
         """
         resp = self._request("/itemloclist/v1", method="POST", json={"items": barcodes})
         return dict({"count": len(resp['item']), 'items': resp['item']})
+
+    def circ_stop_list(self, active_only=True) -> dict:
+        """
+        Circulation Stop List
+        :param bool active_only: Boolean Value. If True only return active stops.
+            If False, show all active and inactive circulation stops
+        """
+        location = "ACTIVE" if active_only else "ALL"
+        resp = self._request(f"circstoplist/v1/{location}", method="GET")
+        return dict({"count": resp['count'], 'stoplist': resp['stoplist']})
+
+    def item_status(self, barcode : str) -> dict:
+        """
+        Retreives Item Status
+        :param str barcode: Alphanumeric String
+        """
+        resp = self._request(f"/itemstatus/v1/{barcode}")
+        item = [{
+            "barcode": resp['barcode'],
+            "status": resp['status']
+        }]
+
+        return dict({"count": len(item), 'item': item})
+
+    def refiled_list(self, accfrom: str, accto: str, collection : str = 'ALL') -> dict:
+        """
+        Refiled Item List
+        :param str accfrom: date in YYYYMMDD format
+        :param str accto: date in YYYYMMDD format, Repeat accfrom date for one day. Field cannot be blank.
+        :param str collection: alphanumeric string, Single collection or Report Class (group of collections) accepted.
+            Use “ALL” for all collections.
+        """
+
+        self._validate_date(accfrom)
+        self._validate_date(accto)
+
+        resp = self._request(f"refiledlist/v1/{accfrom}/{accto}/{collection}")
+        return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
+
+    def retrieved_list(self, accfrom: str, accto: str, collection : str = 'ALL') -> dict:
+        """
+        Retrieved Item List
+        :param str accfrom: date in YYYYMMDD format
+        :param str accto: date in YYYYMMDD format, Repeat accfrom date for one day. Field cannot be blank.
+        :param str collection: alphanumeric string, Single collection or Report Class (group of collections) accepted.
+            Use “ALL” for all collections.
+        """
+
+        self._validate_date(accfrom)
+        self._validate_date(accto)
+
+        resp = self._request(f"retrievedlist/v1/{accfrom}/{accto}/{collection}")
+        return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
+
+    def item_updates(self, items: dict) -> dict:
+        """
+        Item Attribute Update - JSON sent to URL to process bibliographic information updates
+            on one or more items in a single post
+            Note: items will only be updated if information sent does not match info on file.
+            Blank values will not be updated (empty title value will not overwrite existing title on file).
+        :param items dict: This should be a dict with the following fields
+            barcode (required), title, author, volume, call_number, collection,
+            material, oclc, issn, isbn, edition, copy_number, pages, publisher,
+            pub_place, pub_year, physical_desc, format, packaging, condition,
+            shared_contrib, item_type, bib_location, bib_item_status,
+            bib_item_code,bib_level, bib_item_id, bib_record_nbr
+
+        Note: To update a field with a null value in order to clear the field, send the term "CLEARFIELD*" as the field value.
+        """
+
+        payload = []
+        for item in items:
+            payload.append(Item(**item).dict(exclude_none=True))
+
+        output = {
+            "total_count": 0,
+            "updated_count": 0,
+            "errors": [],
+            "warnings": []
+        }
+
+        # We split the data into smaller pieces since there can be large data sets, and the server may timeout
+        for small_chunk in self._split_data(payload, 500):
+            resp = self._request(f"itemupdates/v1", method="POST", json={"items": small_chunk})
+            output['total_count'] += int(resp['total_count'])
+            output['updated_count'] += int(resp['updated_count'])
+            output['errors'] = output['errors'] + resp['errors']
+            output['warnings'] = output['warnings'] + resp['warnings']
+
+        return output
+
+    def incoming_items(self, items: dict) -> dict:
+        """
+        Incoming Accession Items - JSON sent to URL to process one or more incoming accession items in a single post
+            Note: items will only be updated if information sent does not match info on file.
+            Blank values will not be updated (empty title value will not overwrite existing title on file).
+        :param items dict: This should be a dict with the following fields
+            barcode (required), title, author, volume, call_number, collection,
+            material, oclc, issn, isbn, edition, copy_number, pages, publisher,
+            pub_place, pub_year, physical_desc, format, packaging, condition,
+            shared_contrib, item_type, bib_location, bib_item_status,
+            bib_item_code,bib_level, bib_item_id, bib_record_nbr
+
+        Note: To update a field with a null value in order to clear the field, send the term "CLEARFIELD*" as the field value.
+        """
+
+        payload = []
+        for item in items:
+            payload.append(Item(**item).dict(exclude_none=True))
+
+        output = {
+            "incoming_count": 0,
+            "rejected_count": 0,
+            "rejects": [],
+            "warnings": []
+        }
+
+        # We split the data into smaller pieces since there can be large data sets, and the server may timeout
+        # This has been chunked into a single request, since there is a bug currently in the API,
+        # where it only processes the last barcode. Or at least only returns data about the last one
+        for small_chunk in self._split_data(payload, 1):
+            resp = self._request(f"incomingitems/v1", method="POST", json={"incoming": small_chunk})
+            print(resp)
+            output['incoming_count'] += int(resp['incoming_count'])
+            output['rejected_count'] += int(resp['rejected_count']) if resp['rejected_count'] != '' else 0
+            output['rejects'] = output['rejects'] + resp['rejects']
+            output['warnings'] = output['warnings'] + resp['warnings']
+
+        return output
+
+class Item(BaseModel):
+    """
+    :param barcode str: Item Barcode (Required)
+    :param title str:
+    :param author str:
+    :param volume str:
+    :param call_number str:
+    :param collection str: Must match collection code in system, or bibliographic location listed on collection code detail (for translation)
+    :param material str: Must match material type in system, or bibliographic material type listed on material type detail (for translation)
+    :param oclc str:
+    :param issn str:
+    :param isbn str:
+    :param edition str:
+    :param copy_number str:
+    :param pages str:
+    :param publisher str:
+    :param pub_place str:
+    :param pub_year str:
+    :param physical_desc str:
+    :param format str:
+    :param packaging str:
+    :param condition str:
+    :param shared_contrib str: Shared Print Contributor
+    :param item_type str:
+    :param bib_location str:
+    :param bib_item_status str:
+    :param bib_item_code str:
+    :param bib_level str:
+    :param bib_item_id str:
+    :param bib_record_nbr str:
+    """
+
+    barcode : str
+    title : str = None
+    author : str = None
+    volume : str = None
+    call_number : str = None
+    collection : str = None
+    material : str = None
+    oclc : str = None
+    issn : str = None
+    isbn : str = None
+    edition : str = None
+    copy_number : str = None
+    pages : str = None
+    publisher : str = None
+    pub_place : str = None
+    pub_year : str = None
+    physical_desc : str = None
+    format : str = None
+    packaging : str = None
+    condition : str = None
+    shared_contrib : str = None
+    item_type : str = None
+    bib_location : str = None
+    bib_item_status : str = None
+    bib_item_code : str = None
+    bib_level : str = None
+    bib_item_id : str = None
+    bib_record_nbr : str = None
