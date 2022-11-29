@@ -1,5 +1,5 @@
 # About
-caiasoft - SDK for Connecting to CaiaSoft API
+caiasoft - SDK for Connecting to the CaiaSoft API
 
 Caiasoft SDK is the Python library for writing code that interfaces with CaiaSoft Storage Management System.
 
@@ -39,8 +39,6 @@ which can be done from within the Caiasoft Interface.
 
 # Notes
 The full API documentation can be found at https://portal.caiasoft.com/apiguide.php.
-
-Documentation for the SDK can be found at ...
 
 # API Status
 | Method | Caiasoft API Endpoint |        Status          | Function Name            |

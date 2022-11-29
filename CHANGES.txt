@@ -1,1 +1,2 @@
 v0.1.0, 2022-10-20 -- Initial release, only a few feature added
+v1.0.0, 2022-10-29 -- Initial public release. It should be feature complete except for the file API endpoints (incomingfile, requestfile, and circrequests).

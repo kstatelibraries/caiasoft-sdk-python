@@ -1,14 +1,17 @@
+"""
+Basic library for intergrating with the Caiasoft API
+"""
 import re
-import os
-import requests
-from pydantic import BaseModel
 from itertools import islice
 
-class APIError(ValueError):
+import requests
+from pydantic import BaseModel
+
+
+class APIError(ValueError): # pylint: disable=missing-class-docstring,unnecessary-pass
     pass
 
-class Caiasoft(object):
-
+class Caiasoft(): # pylint: disable=missing-class-docstring
     def __init__(self, api_key, site_name):
         self.api_key = api_key
         self.site_name = site_name
@@ -22,7 +25,6 @@ class Caiasoft(object):
         }
 
     def _request(self, endpoint: str, method='GET', params=None, data=None, json=None, timeout=30):
-        
         """Make an authenticated request to the API, raise any API errors, and
         returns data.
         :param str endpoint: API URL
@@ -48,7 +50,7 @@ class Caiasoft(object):
             raise APIError(f"Request to {response.url} returned {response.json()['error']}")
 
         if response.status_code != 200:
-            raise APIError('Request to {} returned {}'.format(response.url, response.status_code))
+            raise APIError(f"Request to {response.url} returned {response.status_code}")
 
         response = response.json()
 
@@ -211,7 +213,7 @@ class Caiasoft(object):
             "details": details
         }]
 
-        resp = self._request(f"circrequests/v1", method="POST", json={"requests": payload})
+        resp = self._request("circrequests/v1", method="POST", json={"requests": payload})
         return dict({"count": resp['request_count'], 'results': resp['results']})
 
     def item_info(self, barcode : str) -> dict:
@@ -328,7 +330,7 @@ class Caiasoft(object):
 
         # We split the data into smaller pieces since there can be large data sets, and the server may timeout
         for small_chunk in self._split_data(payload, 500):
-            resp = self._request(f"itemupdates/v1", method="POST", json={"items": small_chunk})
+            resp = self._request("itemupdates/v1", method="POST", json={"items": small_chunk})
             output['total_count'] += int(resp['total_count'])
             output['updated_count'] += int(resp['updated_count'])
             output['errors'] = output['errors'] + resp['errors']
@@ -366,7 +368,7 @@ class Caiasoft(object):
         # This has been chunked into a single request, since there is a bug currently in the API,
         # where it only processes the last barcode. Or at least only returns data about the last one
         for small_chunk in self._split_data(payload, 1):
-            resp = self._request(f"incomingitems/v1", method="POST", json={"incoming": small_chunk})
+            resp = self._request("incomingitems/v1", method="POST", json={"incoming": small_chunk})
             print(resp)
             output['incoming_count'] += int(resp['incoming_count'])
             output['rejected_count'] += int(resp['rejected_count']) if resp['rejected_count'] != '' else 0
@@ -375,7 +377,7 @@ class Caiasoft(object):
 
         return output
 
-class Item(BaseModel):
+class Item(BaseModel): # pylint: disable=too-few-public-methods
     """
     :param barcode str: Item Barcode (Required)
     :param title str:
