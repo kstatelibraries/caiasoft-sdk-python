@@ -248,6 +248,22 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request("/itemloclist/v1", method="POST", json={"items": barcodes})
         return dict({"count": len(resp['item']), 'items': resp['item']})
 
+    def circ_stop_out(self, circstop="ALL") -> dict:
+        """
+        Circulation Stop - Items Outstanding
+        :param bool active_only: Boolean Value. If True only return active stops.
+            If False, show all active and inactive circulation stops
+        """
+        resp = self._request(f"circstopout/v1/{circstop}", method="GET")
+        items_out = []
+        for item in resp['items_out']:
+            circstop = item['circulation_stop'].split("-")
+            item['circulation_stop_code'] = circstop[0].strip()
+            item['circulation_stop_description'] = circstop[1].strip()
+            items_out.append(item)
+
+        return dict({"count": resp['count'], 'items_out': items_out})
+
     def circ_stop_list(self, active_only=True) -> dict:
         """
         Circulation Stop List

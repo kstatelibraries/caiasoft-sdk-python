@@ -49,6 +49,7 @@ The full API documentation can be found at https://portal.caiasoft.com/apiguide.
 | GET    | /bibmissing           | Implemented / No Tests | missing_bibfield         |
 | GET    | /bibmissing_bydate    | Implemented / No Tests | missing_bibfield_bydate  |
 | GET    | /circstoplist         | Implemented / No Tests | circ_stop_list           |
+| GET    | /circstopout          | Implemented / No Tests | circ_stop_out            |
 | GET    | /item                 | Implemented / No Tests | item_info                |
 | GET    | /itemloc              | Implemented / No Tests | item_loc                 |
 | GET    | /itemstatus           | Implemented / No Tests | item_status              |
