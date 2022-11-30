@@ -45,7 +45,6 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
             timeout=timeout
         )
 
-        print(response.request.body)
         if not response.json()['success']:
             raise APIError(f"Request to {response.url} returned {response.json()['error']}")
 
@@ -102,7 +101,6 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         self._validate_date(accfrom)
         self._validate_date(accto)
 
-        print(f"/accessioned_active/v1/{accfrom}/{accto}/{collection}")
         resp = self._request(f"/accessioned_active/v1/{accfrom}/{accto}/{collection}")
         return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
 
@@ -385,7 +383,6 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         # where it only processes the last barcode. Or at least only returns data about the last one
         for small_chunk in self._split_data(payload, 1):
             resp = self._request("incomingitems/v1", method="POST", json={"incoming": small_chunk})
-            print(resp)
             output['incoming_count'] += int(resp['incoming_count'])
             output['rejected_count'] += int(resp['rejected_count']) if resp['rejected_count'] != '' else 0
             output['rejects'] = output['rejects'] + resp['rejects']
