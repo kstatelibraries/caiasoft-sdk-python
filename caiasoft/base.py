@@ -379,9 +379,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         }
 
         # We split the data into smaller pieces since there can be large data sets, and the server may timeout
-        # This has been chunked into a single request, since there is a bug currently in the API,
-        # where it only processes the last barcode. Or at least only returns data about the last one
-        for small_chunk in self._split_data(payload, 1):
+        for small_chunk in self._split_data(payload, 500):
             resp = self._request("incomingitems/v1", method="POST", json={"incoming": small_chunk})
             output['incoming_count'] += int(resp['incoming_count'])
             output['rejected_count'] += int(resp['rejected_count']) if resp['rejected_count'] != '' else 0
