@@ -382,7 +382,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         for small_chunk in self._split_data(payload, 500):
             resp = self._request("incomingitems/v1", method="POST", json={"incoming": small_chunk})
             output['incoming_count'] += int(resp['incoming_count'])
-            output['rejected_count'] += int(resp['rejected_count']) if resp['rejected_count'] != '' else 0
+            output['rejected_count'] += int(resp['rejected_count'])
             output['rejects'] = output['rejects'] + resp['rejects']
             output['warnings'] = output['warnings'] + resp['warnings']
 
