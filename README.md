@@ -54,6 +54,7 @@ The full API documentation can be found at https://portal.caiasoft.com/apiguide.
 | GET    | /itemloc              | Implemented / No Tests | item_loc                 |
 | GET    | /itemstatus           | Implemented / No Tests | item_status              |
 | GET    | /refiledlist          | Implemented / No Tests | refiled_list             |
+| GET    | /retrievalinfo        | Missing                | |
 | GET    | /retrievedlist        | Implemented / No Tests | retrieved_list           |
 | POST   | /attributefile        | Missing                | |
 | POST   | /incomingfile         | Missing                | |
@@ -63,6 +64,7 @@ The full API documentation can be found at https://portal.caiasoft.com/apiguide.
 | POST   | /itemupdates          | Implemented / No Tests | item_updates             |
 | POST   | /itemsbybarcode       | Implemented / No Tests | items_by_barcode         |
 | POST   | /itemloclist          | Implemented / No Tests | item_location_by_barcode |
+| POST   | /itemstatuslist       | Missing                | |
 
 # Contributing & Bug Reporting
 
