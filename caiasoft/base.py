@@ -240,16 +240,34 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         Items by Barcode - JSON sent to URL to find item status and info on one or more items in a single post
         :param list barcode: Alphanumeric String
         """
-        resp = self._request("/itemsbybarcode/v1", method="POST", json={"barcodes": barcodes})
-        return dict({"count": resp['item_count'], 'items': resp['items']})
+        output = {
+            "item_count": 0,
+            "items": []
+        }
+
+        # We split the data into smaller pieces since there can be large data sets, and the server may timeout
+        for small_chunk in self._split_data(barcodes, 500):
+            resp = self._request("/itemsbybarcode/v1", method="POST", json={"barcodes": list(small_chunk)})
+            output['item_count'] += int(resp['item_count'])
+            output['items'] = output['items'] + resp['items']
+        return dict({"count": output['item_count'], 'items': output['items']})
 
     def item_location_by_barcode(self, barcodes : list) -> dict:
         """
         Item Location List
         :param list barcode: Alphanumeric String
         """
-        resp = self._request("/itemloclist/v1", method="POST", json={"items": barcodes})
-        return dict({"count": len(resp['item']), 'items': resp['item']})
+
+        output = {
+            "items": []
+        }
+
+        # We split the data into smaller pieces since there can be large data sets, and the server may timeout
+        for small_chunk in self._split_data(barcodes, 500):
+            resp = self._request("/itemloclist/v1", method="POST", json={"items": list(small_chunk)})
+            output['items'] = output['items'] + resp['item']
+        return dict({"count": len(output['items']), 'items': output['items']})
+
 
     def circ_stop_out(self, circstop="ALL") -> dict:
         """
