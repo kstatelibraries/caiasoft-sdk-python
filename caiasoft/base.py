@@ -15,6 +15,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
     def __init__(self, api_key, site_name):
         self.api_key = api_key
         self.site_name = site_name
+        self.timeout = 30
         self.valid_bibfields = ['none', 'title', 'author', 'callnumber', 'itemid', 'all']
 
     @property
@@ -24,7 +25,11 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
             "X-API-Key": self.api_key,
         }
 
-    def _request(self, endpoint: str, method='GET', params=None, data=None, json=None, timeout=30):
+    def set_timeout(self, timeout=30):
+        """Set the HTTP Timeout"""
+        self.timeout = timeout
+
+    def _request(self, endpoint: str, method='GET', params=None, data=None, json=None):
         """Make an authenticated request to the API, raise any API errors, and
         returns data.
         :param str endpoint: API URL
@@ -42,7 +47,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
             json=json,
             data=data,
             headers=self.headers,
-            timeout=timeout
+            timeout=self.timeout
         )
 
         if not response.json()['success']:
