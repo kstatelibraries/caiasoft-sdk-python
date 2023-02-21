@@ -64,7 +64,7 @@ The full API documentation can be found at https://portal.caiasoft.com/apiguide.
 | POST   | /itemupdates          | Implemented / No Tests | item_updates             |
 | POST   | /itemsbybarcode       | Implemented / No Tests | items_by_barcode         |
 | POST   | /itemloclist          | Implemented / No Tests | item_location_by_barcode |
-| POST   | /itemstatuslist       | Missing                | |
+| POST   | /itemstatuslist       | Implemented / No Tests | item_status_by_barcodes  |
 
 # Contributing & Bug Reporting
 

@@ -290,6 +290,24 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
 
         return dict({"count": len(item), 'item': item})
 
+    def item_status_by_barcodes(self, barcodes : list) -> dict:
+        """
+        Item Status from List - JSON sent to URL to find item status and info on one or more items in a single post
+        :param list barcode: Alphanumeric String
+        """
+
+        output = {
+            "item_count": 0,
+            "items": []
+        }
+
+        # We split the data into smaller pieces since there can be large data sets, and the server may timeout
+        for small_chunk in self._split_data(barcodes, 500):
+            resp = self._request("/itemstatuslist/v1/", method="POST", json={"barcodes": list(small_chunk)})
+            output['item_count'] += int(resp['item_count'])
+            output['items'] = output['items'] + resp['items']
+        return dict({"count": output['item_count'], 'items': output['items']})
+
     def refiled_list(self, accfrom: str, accto: str, collection : str = 'ALL') -> dict:
         """
         Refiled Item List
