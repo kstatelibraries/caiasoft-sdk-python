@@ -50,11 +50,11 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
             timeout=self.timeout
         )
 
-        if not response.json()['success']:
-            raise APIError(f"Request to {response.url} returned {response.json()['error']}")
-
         if response.status_code != 200:
             raise APIError(f"Request to {response.url} returned {response.status_code}")
+
+        if not response.json()['success']:
+            raise APIError(f"Request to {response.url} returned {response.json()['error']}")
 
         response = response.json()
 
