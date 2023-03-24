@@ -45,11 +45,14 @@ The full API documentation can be found at https://portal.caiasoft.com/apiguide.
 | ------ | --------------------- | ---------------------- | ------------------------ |
 | GET    | /accessionedlist      | Implemented / No Tests | accessioned_items        |
 | GET    | /accessioninfo        | Implemented / No Tests | accession_info           |
+| GET    | /accessioninfo_active | Missing                | |
 | GET    | /accessioned_active   | Implemented / No Tests | accession_items_active   |
 | GET    | /bibmissing           | Implemented / No Tests | missing_bibfield         |
 | GET    | /bibmissing_bydate    | Implemented / No Tests | missing_bibfield_bydate  |
 | GET    | /circstoplist         | Implemented / No Tests | circ_stop_list           |
 | GET    | /circstopout          | Implemented / No Tests | circ_stop_out            |
+| GET    | /deaccessioninfo      | Missing                | |
+| GET    | /deaccessionedlist    | Missing                | |
 | GET    | /item                 | Implemented / No Tests | item_info                |
 | GET    | /itemloc              | Implemented / No Tests | item_loc                 |
 | GET    | /itemstatus           | Implemented / No Tests | item_status              |
@@ -65,6 +68,13 @@ The full API documentation can be found at https://portal.caiasoft.com/apiguide.
 | POST   | /itemsbybarcode       | Implemented / No Tests | items_by_barcode         |
 | POST   | /itemloclist          | Implemented / No Tests | item_location_by_barcode |
 | POST   | /itemstatuslist       | Implemented / No Tests | item_status_by_barcodes  |
+| POST   | /union_author         | Missing                |    |
+| POST   | /union_callnumber     | Missing                |    |
+| POST   | /union_isbn           | Missing                |    |
+| POST   | /union_issn           | Missing                |    |
+| POST   | /union_lccn           | Missing                |    |
+| POST   | /union_oclc           | Missing                |    |
+| POST   | /union_title          | Missing                |    |
 
 # Contributing & Bug Reporting
 
