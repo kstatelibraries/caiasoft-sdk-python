@@ -124,6 +124,22 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request(f"/accessioninfo/v1/{accfrom}/{accto}/{collection}")
         return dict({"count": resp['count'], 'items': resp['items']})
 
+    def accession_info_active(self, accfrom: int, accto: int, collection: str = 'ALL') -> dict:
+        """
+        Accessioned Item info - Use this API to receive back full info on accessioned items currently active/ have not been de-accessioned.
+        Additional info on items provided.
+        :param str accfrom: date in YYYYMMDD format
+        :param str accto: date in YYYYMMDD format, Repeat accfrom date for one day. Field cannot be blank.
+        :param str collection: alphanumeric string, Single collection or Report Class (group of collections) accepted.
+            Use “ALL” for all collections.
+        """
+
+        self._validate_date(accfrom)
+        self._validate_date(accto)
+
+        resp = self._request(f"/accessioninfo_active/v1/{accfrom}/{accto}/{collection}")
+        return dict({"count": resp['count'], 'items': resp['items']})
+
     def missing_bibfield(self, bibfield: str, collection : str = 'ALL') -> dict:
         """
         Accessioned Item info - Use this API to receive back full info on accessioned items, not just a barcode list

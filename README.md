@@ -46,7 +46,7 @@ The full API documentation can be found at https://portal.caiasoft.com/apiguide.
 | GET    | /accessioned_active   | Implemented / No Tests | accession_items_active   |
 | GET    | /accessionedlist      | Implemented / No Tests | accessioned_items        |
 | GET    | /accessioninfo        | Implemented / No Tests | accession_info           |
-| GET    | /accessioninfo_active | Missing                | |
+| GET    | /accessioninfo_active | Implemented / No Tests | accession_info_active    |
 | GET    | /bibmissing           | Implemented / No Tests | missing_bibfield         |
 | GET    | /bibmissing_bydate    | Implemented / No Tests | missing_bibfield_bydate  |
 | GET    | /circstoplist         | Implemented / No Tests | circ_stop_list           |
