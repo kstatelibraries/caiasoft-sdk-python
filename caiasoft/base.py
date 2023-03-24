@@ -507,6 +507,17 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request(f"/union_author/v1", method="POST", json={"author": author })
         return dict({"count": resp['item_count'], 'items': resp['items']})
 
+    def union_callnumber(self, callnumber : str, collection: str = None) -> dict:
+        """
+        Item Location List
+        :param str callnumber: Beginning of Call Number - string starts the Call Number
+            Note: Normalized version of call number sent will also be searched
+        :param str collection (Optional): Must match a collection code assigned to at least one active item
+        """
+
+        resp = self._request(f"/union_callnumber/v1", method="POST", json={"callnumber": callnumber })
+        return dict({"count": resp['item_count'], 'items': resp['items']})
+
 class Item(BaseModel): # pylint: disable=too-few-public-methods
     """
     :param barcode str: Item Barcode (Required)
