@@ -155,7 +155,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         if bibfield.lower() not in self.valid_bibfields:
             raise APIError(f"{bibfield} is not a valid value for bibfield.")
 
-        resp = self._request(f"bibmissing/v1/{collection}/{bibfield.lower()}")
+        resp = self._request(f"/bibmissing/v1/{collection}/{bibfield.lower()}")
         return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
 
     def missing_bibfield_bydate(self, accfrom: str, accto: str, bibfield: str, collection : str = 'ALL') -> dict:
@@ -179,7 +179,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         if bibfield.lower() not in self.valid_bibfields:
             raise APIError(f"{bibfield} is not a valid value for bibfield.")
 
-        resp = self._request(f"bibmissing_bydate/v1/{accfrom}/{accto}/{collection}/{bibfield.lower()}")
+        resp = self._request(f"/bibmissing_bydate/v1/{accfrom}/{accto}/{collection}/{bibfield.lower()}")
         return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
 
     def deaccessioned_items(self, deafrom: str, deato:str , includereaccession: bool = False, collection: str = 'ALL') -> dict:
@@ -328,7 +328,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         :param bool active_only: Boolean Value. If True only return active stops.
             If False, show all active and inactive circulation stops
         """
-        resp = self._request(f"circstopout/v1/{circstop}", method="GET")
+        resp = self._request(f"/circstopout/v1/{circstop}", method="GET")
         items_out = []
         for item in resp['items_out']:
             circstop = item['circulation_stop'].split("-")
@@ -345,7 +345,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
             If False, show all active and inactive circulation stops
         """
         location = "ACTIVE" if active_only else "ALL"
-        resp = self._request(f"circstoplist/v1/{location}", method="GET")
+        resp = self._request(f"/circstoplist/v1/{location}", method="GET")
         return dict({"count": resp['count'], 'stoplist': resp['stoplist']})
 
     def item_status(self, barcode : str) -> dict:
