@@ -497,6 +497,16 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
 
         return output
 
+    def union_author(self, author : str, collection: str = None) -> dict:
+        """
+        Item Location List
+        :param str author: Portion of title - to be searched for as a contains - string appears somewhere in the title
+        :param str collection (Optional): Must match a collection code assigned to at least one active item
+        """
+
+        resp = self._request(f"/union_author/v1", method="POST", json={"author": author })
+        return dict({"count": resp['item_count'], 'items': resp['items']})
+
 class Item(BaseModel): # pylint: disable=too-few-public-methods
     """
     :param barcode str: Item Barcode (Required)

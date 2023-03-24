@@ -11,3 +11,4 @@ Added: /deaccessioninfo endpoint support
 Updated: Python libraries
 Fix Typehints for Accession/Deaccession Dates in functions, int -> str
 Added: /retrievalinfo endpoint support
+Added: /union_author endpoint support
