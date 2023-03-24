@@ -548,6 +548,15 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request(f"/union_lccn/v1", method="POST", json={"lccn": lccn })
         return dict({"count": resp['item_count'], 'items': resp['items']})
 
+    def union_oclc(self, oclc : str, collection: str = None) -> dict:
+        """
+        :param str oclc: OCLC will be left-padded with 0s to create proper length oclcs
+        :param str collection (Optional): Must match a collection code assigned to at least one active item
+        """
+
+        resp = self._request(f"/union_oclc/v1", method="POST", json={"oclc": oclc })
+        return dict({"count": resp['item_count'], 'items': resp['items']})
+
 class Item(BaseModel): # pylint: disable=too-few-public-methods
     """
     :param barcode str: Item Barcode (Required)
