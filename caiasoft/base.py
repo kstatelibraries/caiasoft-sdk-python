@@ -538,6 +538,16 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request(f"/union_issn/v1", method="POST", json={"issn": issn })
         return dict({"count": resp['item_count'], 'items': resp['items']})
 
+    def union_lccn(self, lccn : str, collection: str = None) -> dict:
+        """
+        Item Location List
+        :param str lccn: Exact Match to string
+        :param str collection (Optional): Must match a collection code assigned to at least one active item
+        """
+
+        resp = self._request(f"/union_lccn/v1", method="POST", json={"lccn": lccn })
+        return dict({"count": resp['item_count'], 'items': resp['items']})
+
 class Item(BaseModel): # pylint: disable=too-few-public-methods
     """
     :param barcode str: Item Barcode (Required)

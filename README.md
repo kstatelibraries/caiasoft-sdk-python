@@ -72,7 +72,7 @@ The full API documentation can be found at https://portal.caiasoft.com/apiguide.
 | POST   | /union_callnumber     | Implemented / No Tests | union_callnumber         |
 | POST   | /union_isbn           | Implemented / No Tests | union_isbn               |
 | POST   | /union_issn           | Implemented / No Tests | union_issn               |
-| POST   | /union_lccn           | Missing                |    |
+| POST   | /union_lccn           | Implemented / No Tests | union_lccn               |
 | POST   | /union_oclc           | Missing                |    |
 | POST   | /union_title          | Missing                |    |
 
