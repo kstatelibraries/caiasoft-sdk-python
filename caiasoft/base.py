@@ -182,6 +182,25 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request(f"bibmissing_bydate/v1/{accfrom}/{accto}/{collection}/{bibfield.lower()}")
         return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
 
+    def deaccessioned_items(self, deafrom: int, deato:int , includereaccession: bool = False, collection: str = 'ALL') -> dict:
+        """
+        Get Accessioned Item List
+        This returns all items, both accessioned (active) and deaccessioned
+        :param str deafrom: date in YYYYMMDD format
+        :param str deato: date in YYYYMMDD format, Repeat deafrom date for one day. Field cannot be blank.
+        :param bool includereaccession: If True, Include items that have since been reaccessioned
+        If False (default) Only list items that are still status DEA
+        :param str collection: alphanumeric string, Single collection or Report Class (group of collections) accepted.
+            Use “ALL” for all collections.
+        """
+
+        self._validate_date(deafrom)
+        self._validate_date(deato)
+        includereaccession = "Y" if includereaccession else "N"
+
+        resp = self._request(f"/deaccessionedlist/v1/{deafrom}/{deato}/{collection}/{includereaccession}")
+        return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
+
     def circulation_request(self, barcode: str, request_type: str, stop: str,
         request_id: str = None, requestor: str = None, patron_id: str = None,
         title: str = None, author: str = None, volume: str = None,

@@ -6,3 +6,4 @@ v1.1.2, 2022-12-09 -- Update python libraries
 v1.2.0, 2023-02-21 -- Enable setting timeout of requests, Implemented /itemstatuslist, split large requests automatically into smaller sets.
 Unreleased changes
 Added: /accessioninfo_active endpoint support
+Added: /deaccessionedlist endpoint support
