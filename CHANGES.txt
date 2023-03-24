@@ -13,3 +13,4 @@ Fix Typehints for Accession/Deaccession Dates in functions, int -> str
 Added: /retrievalinfo endpoint support
 Added: /union_author endpoint support
 Added: /union_callnumber endpoint support
+Added: /union_isbn endpoint support
