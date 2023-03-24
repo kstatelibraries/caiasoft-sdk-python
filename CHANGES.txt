@@ -8,3 +8,4 @@ Unreleased changes
 Added: /accessioninfo_active endpoint support
 Added: /deaccessionedlist endpoint support
 Added: /deaccessioninfo endpoint support
+Updated: Python libraries
