@@ -77,7 +77,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         data = iter(data)
         return iter(lambda: tuple(islice(data, size)), ())
 
-    def accessioned_items(self, accfrom: int, accto:int , collection: str = 'ALL') -> dict:
+    def accessioned_items(self, accfrom: str, accto:str , collection: str = 'ALL') -> dict:
         """
         Get Accessioned Item List
         This returns all items, both accessioned (active) and deaccessioned
@@ -93,7 +93,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request(f"/accessionedlist/v1/{accfrom}/{accto}/{collection}")
         return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
 
-    def accession_items_active(self, accfrom: int, accto:int , collection: str = 'ALL') -> dict:
+    def accession_items_active(self, accfrom: str, accto:str , collection: str = 'ALL') -> dict:
         """
         Get Accessioned Item List of Active Items
         This returns only acessioned (active) items.
@@ -109,7 +109,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request(f"/accessioned_active/v1/{accfrom}/{accto}/{collection}")
         return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
 
-    def accession_info(self, accfrom: int, accto: int, collection: str = 'ALL') -> dict:
+    def accession_info(self, accfrom: str, accto: str, collection: str = 'ALL') -> dict:
         """
         Accessioned Item info - Use this API to receive back full info on accessioned items, not just a barcode list
         :param str accfrom: date in YYYYMMDD format
@@ -124,7 +124,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request(f"/accessioninfo/v1/{accfrom}/{accto}/{collection}")
         return dict({"count": resp['count'], 'items': resp['items']})
 
-    def accession_info_active(self, accfrom: int, accto: int, collection: str = 'ALL') -> dict:
+    def accession_info_active(self, accfrom: str, accto: str, collection: str = 'ALL') -> dict:
         """
         Accessioned Item info - Use this API to receive back full info on accessioned items currently active/ have not been de-accessioned.
         Additional info on items provided.
@@ -182,7 +182,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request(f"bibmissing_bydate/v1/{accfrom}/{accto}/{collection}/{bibfield.lower()}")
         return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
 
-    def deaccessioned_items(self, deafrom: int, deato:int , includereaccession: bool = False, collection: str = 'ALL') -> dict:
+    def deaccessioned_items(self, deafrom: str, deato:str , includereaccession: bool = False, collection: str = 'ALL') -> dict:
         """
         Get Accessioned Item List
         This returns all items, both accessioned (active) and deaccessioned
@@ -201,7 +201,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request(f"/deaccessionedlist/v1/{deafrom}/{deato}/{collection}/{includereaccession}")
         return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
 
-    def deaccession_info(self, deafrom: int, deato:int , includereaccession: bool = False, collection: str = 'ALL') -> dict:
+    def deaccession_info(self, deafrom: str, deato:str , includereaccession: bool = False, collection: str = 'ALL') -> dict:
         """
         Accessioned Item info - Use this API to receive back full info on accessioned items, not just a barcode list
         :param str deafrom: date in YYYYMMDD format
@@ -394,19 +394,19 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request(f"refiledlist/v1/{accfrom}/{accto}/{collection}")
         return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
 
-    def retrieved_list(self, accfrom: str, accto: str, collection : str = 'ALL') -> dict:
+    def retrieved_list(self, retfrom: str, retto: str, collection : str = 'ALL') -> dict:
         """
         Retrieved Item List
-        :param str accfrom: date in YYYYMMDD format
-        :param str accto: date in YYYYMMDD format, Repeat accfrom date for one day. Field cannot be blank.
+        :param str retfrom: date in YYYYMMDD format
+        :param str retto: date in YYYYMMDD format, Repeat retfrom date for one day. Field cannot be blank.
         :param str collection: alphanumeric string, Single collection or Report Class (group of collections) accepted.
             Use “ALL” for all collections.
         """
 
-        self._validate_date(accfrom)
-        self._validate_date(accto)
+        self._validate_date(retfrom)
+        self._validate_date(retto)
 
-        resp = self._request(f"retrievedlist/v1/{accfrom}/{accto}/{collection}")
+        resp = self._request(f"retrievedlist/v1/{retfrom}/{retto}/{collection}")
         return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
 
     def item_updates(self, items: dict) -> dict:

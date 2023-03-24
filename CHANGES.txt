@@ -9,3 +9,4 @@ Added: /accessioninfo_active endpoint support
 Added: /deaccessionedlist endpoint support
 Added: /deaccessioninfo endpoint support
 Updated: Python libraries
+Fix Typehints for Accession/Deaccession Dates in functions, int -> str
