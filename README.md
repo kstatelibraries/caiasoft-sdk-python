@@ -57,7 +57,7 @@ The full API documentation can be found at https://portal.caiasoft.com/apiguide.
 | GET    | /itemloc              | Implemented / No Tests | item_loc                 |
 | GET    | /itemstatus           | Implemented / No Tests | item_status              |
 | GET    | /refiledlist          | Implemented / No Tests | refiled_list             |
-| GET    | /retrievalinfo        | Missing                | |
+| GET    | /retrievalinfo        | Implemented / No Tests | retrieval_info           |
 | GET    | /retrievedlist        | Implemented / No Tests | retrieved_list           |
 | POST   | /attributefile        | Missing                | |
 | POST   | /circrequests         | Implemented / No Tests | circulation_request      |

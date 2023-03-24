@@ -394,6 +394,21 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request(f"refiledlist/v1/{accfrom}/{accto}/{collection}")
         return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
 
+    def retrieval_info(self, retfrom: str, retto: str, collection : str = 'ALL') -> dict:
+        """
+        Retrieval Item info - Use this API to receive back full info on retrieved items, not just a barcode list
+        :param str retfrom: date in YYYYMMDD format
+        :param str retto: date in YYYYMMDD format, Repeat retfrom date for one day. Field cannot be blank.
+        :param str collection: alphanumeric string, Single collection or Report Class (group of collections) accepted.
+            Use “ALL” for all collections.
+        """
+
+        self._validate_date(retfrom)
+        self._validate_date(retto)
+
+        resp = self._request(f"retrievalinfo/v1/{retfrom}/{retto}/{collection}")
+        return dict({"count": resp['count'], 'items': resp['items']})
+
     def retrieved_list(self, retfrom: str, retto: str, collection : str = 'ALL') -> dict:
         """
         Retrieved Item List
