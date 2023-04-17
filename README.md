@@ -74,7 +74,7 @@ The full API documentation can be found at https://portal.caiasoft.com/apiguide.
 | POST   | /union_issn           | Implemented / No Tests | union_issn               |
 | POST   | /union_lccn           | Implemented / No Tests | union_lccn               |
 | POST   | /union_oclc           | Implemented / No Tests | union_oclc               |
-| POST   | /union_title          | Missing                |    |
+| POST   | /union_title          | Implemented / No Tests | union_title              |
 
 # Contributing & Bug Reporting
 

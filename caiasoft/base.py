@@ -557,6 +557,16 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request(f"/union_oclc/v1", method="POST", json={"oclc": oclc })
         return dict({"count": resp['item_count'], 'items': resp['items']})
 
+    def union_title(self, title : str, volume: str = None, collection: str = None) -> dict:
+        """
+        :param str title: Portion of title - to be searched for as a contains - string appears somewhere in the title
+        :param str volume: Portion of volume - to be searched for as a contains - string appears somewhere in the volume
+        :param str collection (Optional): Must match a collection code assigned to at least one active item
+        """
+
+        resp = self._request(f"/union_title/v1", method="POST", json={"title": title, "volume": volume })
+        return dict({"count": resp['item_count'], 'items': resp['items']})
+
 class Item(BaseModel): # pylint: disable=too-few-public-methods
     """
     :param barcode str: Item Barcode (Required)

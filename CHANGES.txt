@@ -17,3 +17,4 @@ Added: /union_isbn endpoint support
 Added: /union_issn endpoint support
 Added: /union_lccn endpoint support
 Added: /union_oclc endpoint support
+Added: /union_title endpoint support
