@@ -4,17 +4,18 @@ v1.1.0, 2022-11-30 -- Added new /circstopout endpoint, and some code cleanup
 v1.1.1, 2022-12-01 -- Remove a check if a value if "", since it returns a value now, in the incoming_items call
 v1.1.2, 2022-12-09 -- Update python libraries
 v1.2.0, 2023-02-21 -- Enable setting timeout of requests, Implemented /itemstatuslist, split large requests automatically into smaller sets.
+v1.3.0, 2023-04-17 --
+    Added: /accessioninfo_active endpoint support
+    Added: /deaccessionedlist endpoint support
+    Added: /deaccessioninfo endpoint support
+    Fix Typehints for Accession/Deaccession Dates in functions, int -> str
+    Added: /retrievalinfo endpoint support
+    Added: /union_author endpoint support
+    Added: /union_callnumber endpoint support
+    Added: /union_isbn endpoint support
+    Added: /union_issn endpoint support
+    Added: /union_lccn endpoint support
+    Added: /union_oclc endpoint support
+    Added: /union_title endpoint support
+    Updated: Python libraries
 Unreleased changes
-Added: /accessioninfo_active endpoint support
-Added: /deaccessionedlist endpoint support
-Added: /deaccessioninfo endpoint support
-Updated: Python libraries
-Fix Typehints for Accession/Deaccession Dates in functions, int -> str
-Added: /retrievalinfo endpoint support
-Added: /union_author endpoint support
-Added: /union_callnumber endpoint support
-Added: /union_isbn endpoint support
-Added: /union_issn endpoint support
-Added: /union_lccn endpoint support
-Added: /union_oclc endpoint support
-Added: /union_title endpoint support
