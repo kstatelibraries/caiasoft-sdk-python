@@ -9,7 +9,7 @@ packages = [{include = "caiasoft"}]
 
 [tool.poetry.dependencies]
 python = ">=3.7.2,<4.0"
-requests = "^2.28"
+requests = "^2.31"
 pydantic = "^1.10"
 
 [tool.poetry.group.dev.dependencies]
