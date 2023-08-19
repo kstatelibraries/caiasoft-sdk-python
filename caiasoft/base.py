@@ -219,7 +219,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request(f"/deaccessioninfo/v1/{deafrom}/{deato}/{collection}/{includereaccession}")
         return dict({"count": resp['count'], 'items': resp['items']})
 
-    def circulation_request(self, barcode: str, request_type: str, stop: str,
+    def circulation_request(self, barcodes: list, request_type: str, stop: str,
         request_id: str = None, requestor: str = None, patron_id: str = None,
         title: str = None, author: str = None, volume: str = None,
         call_number: str = None, article_title: str = None, article_author: str = None,
@@ -252,22 +252,24 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         if request_type.upper() not in valid_request_type:
             raise APIError(f"{request_type} is not a valid value for request_type.")
 
-        payload = [{
-            "barcode": barcode,
-            "request_type": request_type,
-            "stop": stop,
-            "request_id": request_id,
-            "requestor": requestor,
-            "patron_id": patron_id,
-            "title": title,
-            "author": author,
-            "volume": volume,
-            "call_number": call_number,
-            "article_title": article_title,
-            "article_author": article_author,
-            "article_pages": article_pages,
-            "details": details
-        }]
+        payload = []
+        for barcode in barcodes:
+            payload.append({
+                "barcode": barcode,
+                "request_type": request_type,
+                "stop": stop,
+                "request_id": request_id,
+                "requestor": requestor,
+                "patron_id": patron_id,
+                "title": title,
+                "author": author,
+                "volume": volume,
+                "call_number": call_number,
+                "article_title": article_title,
+                "article_author": article_author,
+                "article_pages": article_pages,
+                "details": details
+            })
 
         resp = self._request("circrequests/v1", method="POST", json={"requests": payload})
         return dict({"count": resp['request_count'], 'results': resp['results']})
