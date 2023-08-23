@@ -12,23 +12,23 @@ Caiasoft SDK is the Python library for writing code that interfaces with CaiaSof
 - [Getting an API Key](#getting-an-api-key)
 - [Notes](#notes)
 - [API Status](#api-status)
+  - [GET](#get)
+  - [POST w/file payloads](#post-wfile-payloads)
+  - [POST w/ JSON payloads](#post-w-json-payloads)
 - [Contributing \& Bug Reporting](#contributing--bug-reporting)
 
 # Installation
 
 Use pip: (not setup yet)
 
-```
-pip install caiasoft-sdk-python
-```
+    pip install caiasoft-sdk-python
+
 
 ### Note 
->
 
->Alternatively the _latest_ version could be directly installed via GitHub:
->```
->pip install git+ssh://git@github.com:kstatelibraries/caiasoft-sdk-python.git
->```
+Alternatively the _latest_ version could be directly installed via GitHub:
+
+    pip install git+https://github.com/kstatelibraries/caiasoft-sdk-python.git@main
 
 # Getting an API Key
 
@@ -41,6 +41,8 @@ which can be done from within the Caiasoft Interface.
 The full API documentation can be found at https://portal.caiasoft.com/apiguide.php.
 
 # API Status
+
+## GET
 | Method | Caiasoft API Endpoint |        Status          | Function Name            |
 | ------ | --------------------- | ---------------------- | ------------------------ |
 | GET    | /accessioned_active   | Implemented / No Tests | accession_items_active   |
@@ -59,15 +61,25 @@ The full API documentation can be found at https://portal.caiasoft.com/apiguide.
 | GET    | /refiledlist          | Implemented / No Tests | refiled_list             |
 | GET    | /retrievalinfo        | Implemented / No Tests | retrieval_info           |
 | GET    | /retrievedlist        | Implemented / No Tests | retrieved_list           |
+
+## POST w/file payloads
+
+| Method | Caiasoft API Endpoint |        Status          | Function Name            |
+| ------ | --------------------- | ---------------------- | ------------------------ |
 | POST   | /attributefile        | Missing                | |
-| POST   | /circrequests         | Implemented / No Tests | circulation_request      |
 | POST   | /incomingfile         | Missing                | |
-| POST   | /incomingitems        | Implemented / No Tests | incoming_items           |
-| POST   | /itemloclist          | Implemented / No Tests | item_location_by_barcode |
-| POST   | /itemsbybarcode       | Implemented / No Tests | items_by_barcode         |
-| POST   | /itemstatuslist       | Implemented / No Tests | item_status_by_barcodes  |
-| POST   | /itemupdates          | Implemented / No Tests | item_updates             |
 | POST   | /requestfile          | Missing                | |
+
+## POST w/ JSON payloads
+
+| Method | Caiasoft API Endpoint |        Status          | Function Name            |
+| ------ | --------------------- | ---------------------- | ------------------------ |
+| POST   | /circrequests         | Implemented / No Tests | circulation_request      |
+| POST   | /incomingitems        | Implemented / No Tests | incoming_items           |
+| POST   | /itemupdates          | Implemented / No Tests | item_updates             |
+| POST   | /itemsbybarcode       | Implemented / No Tests | items_by_barcode         |
+| POST   | /itemloclist          | Implemented / No Tests | item_location_by_barcode |
+| POST   | /itemstatuslist       | Implemented / No Tests | item_status_by_barcodes  |
 | POST   | /union_author         | Implemented / No Tests | union_author             |
 | POST   | /union_callnumber     | Implemented / No Tests | union_callnumber         |
 | POST   | /union_isbn           | Implemented / No Tests | union_isbn               |
@@ -78,8 +90,6 @@ The full API documentation can be found at https://portal.caiasoft.com/apiguide.
 
 # Contributing & Bug Reporting
 
-If you find a bug, please submit it through the `GitHub issues page`_.
+If you find a bug, please submit it through the [GitHub issues page](https://github.com/kstatelibraries/caiasoft-sdk-python/issues).
 
 Pull requests are welcome!
-
-.. _`GitHub issues page`: https://github.com/kstatelibraries/caiasoft-sdk-python/issues
