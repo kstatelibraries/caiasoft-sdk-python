@@ -290,10 +290,11 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request(f"/itemloc/v1/{barcode}")
         return dict({"count": len(resp['item']), 'item': resp['item']})
 
-    def items_by_barcode(self, barcodes : list) -> dict:
+    def items_by_barcode(self, barcodes : list, batch_size : int = 500) -> dict:
         """
         Items by Barcode - JSON sent to URL to find item status and info on one or more items in a single post
         :param list barcode: Alphanumeric String
+        :param batch_size int: The total number of items to send to the API in one request. Default is 500.
         """
         output = {
             "item_count": 0,
@@ -301,16 +302,17 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         }
 
         # We split the data into smaller pieces since there can be large data sets, and the server may timeout
-        for small_chunk in self._split_data(barcodes, 500):
+        for small_chunk in self._split_data(barcodes, batch_size):
             resp = self._request("/itemsbybarcode/v1", method="POST", json={"barcodes": list(small_chunk)})
             output['item_count'] += int(resp['item_count'])
             output['items'] = output['items'] + resp['items']
         return dict({"count": output['item_count'], 'items': output['items']})
 
-    def item_location_by_barcode(self, barcodes : list) -> dict:
+    def item_location_by_barcode(self, barcodes : list, batch_size : int = 500) -> dict:
         """
         Item Location List
         :param list barcode: Alphanumeric String
+        :param batch_size int: The total number of items to send to the API in one request. Default is 500.
         """
 
         output = {
@@ -318,7 +320,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         }
 
         # We split the data into smaller pieces since there can be large data sets, and the server may timeout
-        for small_chunk in self._split_data(barcodes, 500):
+        for small_chunk in self._split_data(barcodes, batch_size):
             resp = self._request("/itemloclist/v1", method="POST", json={"items": list(small_chunk)})
             output['items'] = output['items'] + resp['item']
         return dict({"count": len(output['items']), 'items': output['items']})
@@ -363,10 +365,11 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
 
         return dict({"count": len(item), 'item': item})
 
-    def item_status_by_barcodes(self, barcodes : list) -> dict:
+    def item_status_by_barcodes(self, barcodes : list, batch_size : int = 500) -> dict:
         """
         Item Status from List - JSON sent to URL to find item status and info on one or more items in a single post
         :param list barcode: Alphanumeric String
+        :param batch_size int: The total number of items to send to the API in one request. Default is 500.
         """
 
         output = {
@@ -375,7 +378,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         }
 
         # We split the data into smaller pieces since there can be large data sets, and the server may timeout
-        for small_chunk in self._split_data(barcodes, 500):
+        for small_chunk in self._split_data(barcodes, batch_size):
             resp = self._request("/itemstatuslist/v1/", method="POST", json={"barcodes": list(small_chunk)})
             output['item_count'] += int(resp['item_count'])
             output['items'] = output['items'] + resp['items']
@@ -426,7 +429,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         resp = self._request(f"retrievedlist/v1/{retfrom}/{retto}/{collection}")
         return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
 
-    def item_updates(self, items: dict) -> dict:
+    def item_updates(self, items: dict, batch_size: int = 500) -> dict:
         """
         Item Attribute Update - JSON sent to URL to process bibliographic information updates
             on one or more items in a single post
@@ -438,6 +441,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
             pub_place, pub_year, physical_desc, format, packaging, condition,
             shared_contrib, item_type, bib_location, bib_item_status,
             bib_item_code,bib_level, bib_item_id, bib_record_nbr
+        :param batch_size int: The total number of items to send to the API in one request. Default is 500.
 
         Note: To update a field with a null value in order to clear the field, send the term "CLEARFIELD*" as the field value.
         """
@@ -454,7 +458,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         }
 
         # We split the data into smaller pieces since there can be large data sets, and the server may timeout
-        for small_chunk in self._split_data(payload, 500):
+        for small_chunk in self._split_data(payload, batch_size):
             resp = self._request("itemupdates/v1", method="POST", json={"items": small_chunk})
             output['total_count'] += int(resp['total_count'])
             output['updated_count'] += int(resp['updated_count'])
@@ -463,7 +467,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
 
         return output
 
-    def incoming_items(self, items: dict) -> dict:
+    def incoming_items(self, items: dict, batch_size: int = 500) -> dict:
         """
         Incoming Accession Items - JSON sent to URL to process one or more incoming accession items in a single post
             Note: items will only be updated if information sent does not match info on file.
@@ -474,6 +478,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
             pub_place, pub_year, physical_desc, format, packaging, condition,
             shared_contrib, item_type, bib_location, bib_item_status,
             bib_item_code,bib_level, bib_item_id, bib_record_nbr
+        :param batch_size int: The total number of items to send to the API in one request. Default is 500.
 
         Note: To update a field with a null value in order to clear the field, send the term "CLEARFIELD*" as the field value.
         """
@@ -490,7 +495,7 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         }
 
         # We split the data into smaller pieces since there can be large data sets, and the server may timeout
-        for small_chunk in self._split_data(payload, 500):
+        for small_chunk in self._split_data(payload, batch_size):
             resp = self._request("incomingitems/v1", method="POST", json={"incoming": small_chunk})
             output['incoming_count'] += int(resp['incoming_count'])
             output['rejected_count'] += int(resp['rejected_count'])
