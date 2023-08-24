@@ -6,6 +6,8 @@ from itertools import islice
 
 import requests
 from pydantic import BaseModel
+from datetime import datetime, timedelta
+from time import strftime
 
 
 class APIError(ValueError): # pylint: disable=missing-class-docstring,unnecessary-pass
@@ -90,8 +92,28 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         self._validate_date(accfrom)
         self._validate_date(accto)
 
-        resp = self._request(f"/accessionedlist/v1/{accfrom}/{accto}/{collection}")
-        return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
+        accfrom = datetime.strptime(accfrom, "%Y%m%d")
+        accto = datetime.strptime(accto, "%Y%m%d")
+        delta = timedelta(days=365)
+
+        output = {
+            "count": 0,
+            "barcodes": []
+        }
+
+        # We split the dates into smaller chunks, so we have a better chance to return data from Caiasoft
+        while (accfrom <= accto):
+            if accfrom + delta > accto:
+                end_value = accto
+            else:
+                end_value = accfrom+delta-timedelta(days=1)
+            resp = self._request(f"/accessionedlist/v1/{accfrom.strftime('%Y%m%d')}/{end_value.strftime('%Y%m%d')}/{collection}")
+            accfrom += delta
+
+            output['count'] += int(resp['count'])
+            output['barcodes'] = output['barcodes'] + resp['barcodes']
+
+        return dict({"count": output['count'], 'barcodes': output['barcodes']})
 
     def accession_items_active(self, accfrom: str, accto:str , collection: str = 'ALL') -> dict:
         """
@@ -106,8 +128,28 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         self._validate_date(accfrom)
         self._validate_date(accto)
 
-        resp = self._request(f"/accessioned_active/v1/{accfrom}/{accto}/{collection}")
-        return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
+        accfrom = datetime.strptime(accfrom, "%Y%m%d")
+        accto = datetime.strptime(accto, "%Y%m%d")
+        delta = timedelta(days=365)
+
+        output = {
+            "count": 0,
+            "barcodes": []
+        }
+
+        # We split the dates into smaller chunks, so we have a better chance to return data from Caiasoft
+        while (accfrom <= accto):
+            if accfrom + delta > accto:
+                end_value = accto
+            else:
+                end_value = accfrom+delta-timedelta(days=1)
+            resp = self._request(f"/accessioned_active/v1/{accfrom.strftime('%Y%m%d')}/{end_value.strftime('%Y%m%d')}/{collection}")
+            accfrom += delta
+
+            output['count'] += int(resp['count'])
+            output['barcodes'] = output['barcodes'] + resp['barcodes']
+
+        return dict({"count": output['count'], 'barcodes': output['barcodes']})
 
     def accession_info(self, accfrom: str, accto: str, collection: str = 'ALL') -> dict:
         """
@@ -121,8 +163,28 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         self._validate_date(accfrom)
         self._validate_date(accto)
 
-        resp = self._request(f"/accessioninfo/v1/{accfrom}/{accto}/{collection}")
-        return dict({"count": resp['count'], 'items': resp['items']})
+        accfrom = datetime.strptime(accfrom, "%Y%m%d")
+        accto = datetime.strptime(accto, "%Y%m%d")
+        delta = timedelta(days=365)
+
+        output = {
+            "count": 0,
+            "items": []
+        }
+
+        # We split the dates into smaller chunks, so we have a better chance to return data from Caiasoft
+        while (accfrom <= accto):
+            if accfrom + delta > accto:
+                end_value = accto
+            else:
+                end_value = accfrom+delta-timedelta(days=1)
+            resp = self._request(f"/accessioninfo/v1/{accfrom.strftime('%Y%m%d')}/{end_value.strftime('%Y%m%d')}/{collection}")
+            accfrom += delta
+
+            output['count'] += int(resp['count'])
+            output['items'] = output['items'] + resp['items']
+
+        return dict({"count": output['count'], 'items': output['items']})
 
     def accession_info_active(self, accfrom: str, accto: str, collection: str = 'ALL') -> dict:
         """
@@ -137,8 +199,28 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         self._validate_date(accfrom)
         self._validate_date(accto)
 
-        resp = self._request(f"/accessioninfo_active/v1/{accfrom}/{accto}/{collection}")
-        return dict({"count": resp['count'], 'items': resp['items']})
+        accfrom = datetime.strptime(accfrom, "%Y%m%d")
+        accto = datetime.strptime(accto, "%Y%m%d")
+        delta = timedelta(days=365)
+
+        output = {
+            "count": 0,
+            "items": []
+        }
+
+        # We split the dates into smaller chunks, so we have a better chance to return data from Caiasoft
+        while (accfrom <= accto):
+            if accfrom + delta > accto:
+                end_value = accto
+            else:
+                end_value = accfrom+delta-timedelta(days=1)
+            resp = self._request(f"/accessioninfo_active/v1/{accfrom.strftime('%Y%m%d')}/{end_value.strftime('%Y%m%d')}/{collection}")
+            accfrom += delta
+
+            output['count'] += int(resp['count'])
+            output['items'] = output['items'] + resp['items']
+
+        return dict({"count": output['count'], 'items': output['items']})
 
     def missing_bibfield(self, bibfield: str, collection : str = 'ALL') -> dict:
         """
@@ -179,8 +261,28 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         if bibfield.lower() not in self.valid_bibfields:
             raise APIError(f"{bibfield} is not a valid value for bibfield.")
 
-        resp = self._request(f"/bibmissing_bydate/v1/{accfrom}/{accto}/{collection}/{bibfield.lower()}")
-        return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
+        accfrom = datetime.strptime(accfrom, "%Y%m%d")
+        accto = datetime.strptime(accto, "%Y%m%d")
+        delta = timedelta(days=365)
+
+        output = {
+            "count": 0,
+            "barcodes": []
+        }
+
+        # We split the dates into smaller chunks, so we have a better chance to return data from Caiasoft
+        while (accfrom <= accto):
+            if accfrom + delta > accto:
+                end_value = accto
+            else:
+                end_value = accfrom+delta-timedelta(days=1)
+            resp = self._request(f"/bibmissing_bydate/v1/{accfrom.strftime('%Y%m%d')}/{end_value.strftime('%Y%m%d')}/{collection}/{bibfield.lower()}")
+            accfrom += delta
+
+            output['count'] += int(resp['count'])
+            output['barcodes'] = output['barcodes'] + resp['barcodes']
+
+        return dict({"count": output['count'], 'barcodes': output['barcodes']})
 
     def deaccessioned_items(self, deafrom: str, deato:str , includereaccession: bool = False, collection: str = 'ALL') -> dict:
         """
@@ -198,8 +300,28 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         self._validate_date(deato)
         includereaccession = "Y" if includereaccession else "N"
 
-        resp = self._request(f"/deaccessionedlist/v1/{deafrom}/{deato}/{collection}/{includereaccession}")
-        return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
+        accfrom = datetime.strptime(accfrom, "%Y%m%d")
+        accto = datetime.strptime(accto, "%Y%m%d")
+        delta = timedelta(days=365)
+
+        output = {
+            "count": 0,
+            "barcodes": []
+        }
+
+        # We split the dates into smaller chunks, so we have a better chance to return data from Caiasoft
+        while (accfrom <= accto):
+            if accfrom + delta > accto:
+                end_value = accto
+            else:
+                end_value = accfrom+delta-timedelta(days=1)
+            resp = self._request(f"/deaccessionedlist/v1/{accfrom.strftime('%Y%m%d')}/{end_value.strftime('%Y%m%d')}/{collection}/{includereaccession}")
+            accfrom += delta
+
+            output['count'] += int(resp['count'])
+            output['barcodes'] = output['barcodes'] + resp['barcodes']
+
+        return dict({"count": output['count'], 'barcodes': output['barcodes']})
 
     def deaccession_info(self, deafrom: str, deato:str , includereaccession: bool = False, collection: str = 'ALL') -> dict:
         """
@@ -216,8 +338,28 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         self._validate_date(deato)
         includereaccession = "Y" if includereaccession else "N"
 
-        resp = self._request(f"/deaccessioninfo/v1/{deafrom}/{deato}/{collection}/{includereaccession}")
-        return dict({"count": resp['count'], 'items': resp['items']})
+        deafrom = datetime.strptime(deafrom, "%Y%m%d")
+        deato = datetime.strptime(deato, "%Y%m%d")
+        delta = timedelta(days=365)
+
+        output = {
+            "count": 0,
+            "items": []
+        }
+
+        # We split the dates into smaller chunks, so we have a better chance to return data from Caiasoft
+        while (deafrom <= deato):
+            if deafrom + delta > deato:
+                end_value = deato
+            else:
+                end_value = deafrom+delta-timedelta(days=1)
+            resp = self._request(f"/deaccessioninfo/v1/{deafrom.strftime('%Y%m%d')}/{end_value.strftime('%Y%m%d')}/{collection}/{includereaccession}")
+            deafrom += delta
+
+            output['count'] += int(resp['count'])
+            output['items'] = output['items'] + resp['items']
+
+        return dict({"count": output['count'], 'items': output['items']})
 
     def circulation_request(self, barcodes: list, request_type: str, stop: str,
         request_id: str = None, requestor: str = None, patron_id: str = None,
@@ -396,8 +538,28 @@ class Caiasoft(): # pylint: disable=missing-class-docstring
         self._validate_date(accfrom)
         self._validate_date(accto)
 
-        resp = self._request(f"refiledlist/v1/{accfrom}/{accto}/{collection}")
-        return dict({"count": resp['count'], 'barcodes': resp['barcodes']})
+        accfrom = datetime.strptime(accfrom, "%Y%m%d")
+        accto = datetime.strptime(accto, "%Y%m%d")
+        delta = timedelta(days=365)
+
+        output = {
+            "count": 0,
+            "barcodes": []
+        }
+
+        # We split the dates into smaller chunks, so we have a better chance to return data from Caiasoft
+        while (accfrom <= accto):
+            if accfrom + delta > accto:
+                end_value = accto
+            else:
+                end_value = accfrom+delta-timedelta(days=1)
+            resp = self._request(f"/refiledlist/v1/{accfrom.strftime('%Y%m%d')}/{end_value.strftime('%Y%m%d')}/{collection}")
+            accfrom += delta
+
+            output['count'] += int(resp['count'])
+            output['barcodes'] = output['barcodes'] + resp['barcodes']
+
+        return dict({"count": output['count'], 'barcodes': output['barcodes']})
 
     def retrieval_info(self, retfrom: str, retto: str, collection : str = 'ALL') -> dict:
         """
