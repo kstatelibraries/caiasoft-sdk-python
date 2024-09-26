@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "caiasoft-sdk-python"
-version = "2.2.0"
+version = "2.3.0"
 description = "SDK for Caiasoft API"
 authors = ["Thomas Misilo <tmisilo@ksu.edu>"]
 license = "MIT"
@@ -8,9 +8,9 @@ readme = "README.md"
 packages = [{include = "caiasoft"}]
 
 [tool.poetry.dependencies]
-python = ">=3.7.2,<4.0"
-requests = "^2.28"
-pydantic = "^1.10"
+python = ">=3.8,<4.0"
+requests = "^2.32.3"
+pydantic = "^2.9.2"
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^2.15.7"
