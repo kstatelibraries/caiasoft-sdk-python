@@ -13,7 +13,7 @@ requests = "^2.32.3"
 pydantic = "^2.9.2"
 
 [tool.poetry.group.dev.dependencies]
-pylint = "^2.15.7"
+pylint = "^3.2.7"
 
 [tool.poetry_bumpversion.file."caiasoft/__init__.py"]
 
