@@ -1,0 +1,21 @@
+name: Check for No CFLR Line Endings
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  validate-cflr-line-endings:
+    name: Ensure No CFLR Line Endings
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository contents
+        uses: actions/checkout@v4
+
+      - name: Use action to check for CRLF endings
+        uses: erclu/check-crlf@v1
