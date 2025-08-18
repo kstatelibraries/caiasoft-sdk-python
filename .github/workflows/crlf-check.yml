@@ -1,4 +1,4 @@
-name: Check for No CFLR Line Endings
+name: Check for No CRLF Line Endings
 
 on:
   push:
@@ -9,13 +9,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  validate-cflr-line-endings:
-    name: Ensure No CFLR Line Endings
+  validate-crlf-line-endings:
+    name: Ensure No crlf Line Endings
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository contents
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5.0.0
 
       - name: Use action to check for CRLF endings
-        uses: erclu/check-crlf@v1
+        uses: erclu/check-crlf@master
